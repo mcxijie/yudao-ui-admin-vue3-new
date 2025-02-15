@@ -54,7 +54,8 @@ export default {
     updateTime: '更新时间',
     copy: '复制',
     copySuccess: '复制成功',
-    copyError: '复制失败'
+    copyError: '复制失败',
+    applyMessage: '是否同意'
   },
   lock: {
     lockScreen: '锁定屏幕',

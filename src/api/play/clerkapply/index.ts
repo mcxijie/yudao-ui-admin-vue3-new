@@ -44,5 +44,10 @@ export const ClerkApplyApi = {
   // 导出陪玩店员申请 Excel
   exportClerkApply: async (params) => {
     return await request.download({ url: `/play/clerk-apply/export-excel`, params })
+  },
+
+  // 同意店员申请
+  agreeClerkApply: async (id: number) => {
+    return await request.get({ url: `/play/clerk-apply/agree?id=` + id })
   }
 }

@@ -71,6 +71,18 @@ export const useMessage = () => {
         }
       )
     },
+    // 同意数据
+    applyConfirm(content?: string, tip?: string) {
+      return ElMessageBox.confirm(
+        content ? content : t('common.applyMessage'),
+        tip ? tip : t('common.confirmTitle'),
+        {
+          confirmButtonText: t('common.ok'),
+          cancelButtonText: t('common.cancel'),
+          type: 'warning'
+        }
+      )
+    },
     // 导出窗体
     exportConfirm(content?: string, tip?: string) {
       return ElMessageBox.confirm(

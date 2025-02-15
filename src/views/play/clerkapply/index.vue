@@ -150,6 +150,14 @@
         <template #default="scope">
           <el-button
             link
+            type="danger"
+            @click="handleAgree(scope.row.id)"
+            v-hasPermi="['play:clerk-apply:agree']"
+          >
+            同意
+          </el-button>
+          <el-button
+            link
             type="primary"
             @click="openForm('update', scope.row.id)"
             v-hasPermi="['play:clerk-apply:update']"
@@ -241,6 +249,17 @@ const resetQuery = () => {
 const formRef = ref()
 const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
+}
+
+const handleAgree = async (id: number) => {
+  try {
+    await message.applyConfirm()
+    //发起同意
+    await ClerkApplyApi.agreeClerkApply(id)
+    message.success(t('common.createSuccess'))
+    // 刷新列表
+    await getList()
+  } catch {}
 }
 
 /** 删除按钮操作 */
