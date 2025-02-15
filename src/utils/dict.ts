@@ -130,7 +130,6 @@ export enum DICT_TYPE {
   SYSTEM_NOTIFY_TEMPLATE_TYPE = 'system_notify_template_type',
   SYSTEM_SOCIAL_TYPE = 'system_social_type',
 
-
   // ========== INFRA 模块 ==========
   INFRA_BOOLEAN_STRING = 'infra_boolean_string',
   INFRA_JOB_STATUS = 'infra_job_status',
@@ -243,5 +242,7 @@ export enum DICT_TYPE {
   IOT_RW_TYPE = 'iot_rw_type', // IOT 读写类型
 
   // ========== PLAY - 陪玩模块  ==========
-  PLAY_IS_NOT = "play_is_not"
+  PLAY_IS_NOT = 'play_is_not',
+  PLAY_STAFF_LEVEL = 'play_staff_level',
+  PLAY_PAYMENT_TYPE = 'play_payment_type'
 }
