@@ -23,6 +23,36 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="订单类型" prop="orderType">
+        <el-select
+          v-model="queryParams.orderType"
+          placeholder="请选择订单类型"
+          clearable
+          class="!w-240px"
+        >
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_ORDER_TYPE)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="店员等级" prop="staffLevel">
+        <el-select
+          v-model="queryParams.staffLevel"
+          placeholder="请选择店员等级"
+          clearable
+          class="!w-240px"
+        >
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_STAFF_LEVEL)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="微信号" prop="wechat">
         <el-input
           v-model="queryParams.wechat"
@@ -31,6 +61,21 @@
           @keyup.enter="handleQuery"
           class="!w-240px"
         />
+      </el-form-item>
+      <el-form-item label="排除下单店员" prop="excludeStaff">
+        <el-select
+          v-model="queryParams.excludeStaff"
+          placeholder="请选择排除下单店员"
+          clearable
+          class="!w-240px"
+        >
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_IS_NOT)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="支付类型" prop="paymentType">
         <el-select
@@ -41,6 +86,21 @@
         >
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_PAYMENT_TYPE)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="订单状态" prop="orderState">
+        <el-select
+          v-model="queryParams.orderState"
+          placeholder="请选择订单状态"
+          clearable
+          class="!w-240px"
+        >
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_ORDER_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -65,7 +125,7 @@
           type="primary"
           plain
           @click="openForm('create')"
-          v-hasPermi="['play:random-order:create']"
+          v-hasPermi="['play:service-order:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
@@ -74,7 +134,7 @@
           plain
           @click="handleExport"
           :loading="exportLoading"
-          v-hasPermi="['play:random-order:export']"
+          v-hasPermi="['play:service-order:export']"
         >
           <Icon icon="ep:download" class="mr-5px" /> 导出
         </el-button>
@@ -87,20 +147,41 @@
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
       <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="用户编号" align="center" prop="userId" />
+      <el-table-column label="店员编号" align="center" prop="staffId" />
+      <el-table-column label="礼物编号" align="center" prop="giftId" />
       <el-table-column label="店员性别" align="center" prop="staffSex">
         <template #default="scope">
           <dict-tag :type="DICT_TYPE.SYSTEM_USER_SEX" :value="scope.row.staffSex" />
         </template>
       </el-table-column>
-      <el-table-column label="服务类型编号" align="center" prop="serviceTypeId" />
+      <el-table-column label="订单类型" align="center" prop="orderType">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.PLAY_ORDER_TYPE" :value="scope.row.orderType" />
+        </template>
+      </el-table-column>
+      <el-table-column label="店员等级" align="center" prop="staffLevel">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.PLAY_STAFF_LEVEL" :value="scope.row.staffLevel" />
+        </template>
+      </el-table-column>
       <el-table-column label="购买数量" align="center" prop="purchaseQuantity" />
       <el-table-column label="微信号" align="center" prop="wechat" />
       <el-table-column label="其他要求" align="center" prop="otherRequirements" />
-      <el-table-column label="排除下单店员" align="center" prop="excludeStaff" />
+      <el-table-column label="排除下单店员" align="center" prop="excludeStaff">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.PLAY_IS_NOT" :value="scope.row.excludeStaff" />
+        </template>
+      </el-table-column>
       <el-table-column label="优惠券编号" align="center" prop="coupon" />
       <el-table-column label="支付类型" align="center" prop="paymentType">
         <template #default="scope">
           <dict-tag :type="DICT_TYPE.PLAY_PAYMENT_TYPE" :value="scope.row.paymentType" />
+        </template>
+      </el-table-column>
+      <el-table-column label="总金额" align="center" prop="totalAmount" />
+      <el-table-column label="订单状态" align="center" prop="orderState">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.PLAY_ORDER_STATE" :value="scope.row.orderState" />
         </template>
       </el-table-column>
       <el-table-column
@@ -116,7 +197,7 @@
             link
             type="primary"
             @click="openForm('update', scope.row.id)"
-            v-hasPermi="['play:random-order:update']"
+            v-hasPermi="['play:service-order:update']"
           >
             编辑
           </el-button>
@@ -124,7 +205,7 @@
             link
             type="danger"
             @click="handleDelete(scope.row.id)"
-            v-hasPermi="['play:random-order:delete']"
+            v-hasPermi="['play:service-order:delete']"
           >
             删除
           </el-button>
@@ -141,31 +222,35 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-  <RandomOrderForm ref="formRef" @success="getList" />
+  <ServiceOrderForm ref="formRef" @success="getList" />
 </template>
 
 <script setup lang="ts">
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
-import { RandomOrderApi, RandomOrderVO } from '@/api/play/randomorder'
-import RandomOrderForm from './RandomOrderForm.vue'
+import { ServiceOrderApi, ServiceOrderVO } from '@/api/play/serviceorder'
+import ServiceOrderForm from './ServiceOrderForm.vue'
 
-/** 陪玩随机下单 列表 */
-defineOptions({ name: 'RandomOrder' })
+/** 陪玩订单 列表 */
+defineOptions({ name: 'ServiceOrder' })
 
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
 const loading = ref(true) // 列表的加载中
-const list = ref<RandomOrderVO[]>([]) // 列表的数据
+const list = ref<ServiceOrderVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
   staffSex: undefined,
+  orderType: undefined,
+  staffLevel: undefined,
   wechat: undefined,
+  excludeStaff: undefined,
   paymentType: undefined,
+  orderState: undefined,
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
@@ -175,7 +260,7 @@ const exportLoading = ref(false) // 导出的加载中
 const getList = async () => {
   loading.value = true
   try {
-    const data = await RandomOrderApi.getRandomOrderPage(queryParams)
+    const data = await ServiceOrderApi.getServiceOrderPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -207,7 +292,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await RandomOrderApi.deleteRandomOrder(id)
+    await ServiceOrderApi.deleteServiceOrder(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
@@ -221,8 +306,8 @@ const handleExport = async () => {
     await message.exportConfirm()
     // 发起导出
     exportLoading.value = true
-    const data = await RandomOrderApi.exportRandomOrder(queryParams)
-    download.excel(data, '陪玩随机下单.xls')
+    const data = await ServiceOrderApi.exportServiceOrder(queryParams)
+    download.excel(data, '陪玩订单.xls')
   } catch {
   } finally {
     exportLoading.value = false

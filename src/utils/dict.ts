@@ -244,5 +244,7 @@ export enum DICT_TYPE {
   // ========== PLAY - 陪玩模块  ==========
   PLAY_IS_NOT = 'play_is_not',
   PLAY_STAFF_LEVEL = 'play_staff_level',
-  PLAY_PAYMENT_TYPE = 'play_payment_type'
+  PLAY_PAYMENT_TYPE = 'play_payment_type',
+  PLAY_ORDER_TYPE = "play_order_type",
+  PLAY_ORDER_STATE = "play_order_state"
 }

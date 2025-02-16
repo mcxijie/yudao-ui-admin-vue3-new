@@ -10,19 +10,41 @@
       <el-form-item label="用户编号" prop="userId">
         <el-input v-model="formData.userId" placeholder="请输入用户编号" />
       </el-form-item>
+      <el-form-item label="店员编号" prop="staffId">
+        <el-input v-model="formData.staffId" placeholder="请输入店员编号" />
+      </el-form-item>
+      <el-form-item label="礼物编号" prop="giftId">
+        <el-input v-model="formData.giftId" placeholder="请输入礼物编号" />
+      </el-form-item>
       <el-form-item label="店员性别" prop="staffSex">
-        <el-radio-group v-model="formData.staffSex">
-          <el-radio
+        <el-select v-model="formData.staffSex" placeholder="请选择店员性别">
+          <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_USER_SEX)"
             :key="dict.value"
-            :label="dict.value"
-          >
-            {{ dict.label }}
-          </el-radio>
-        </el-radio-group>
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="服务类型编号" prop="serviceTypeId">
-        <el-input v-model="formData.serviceTypeId" placeholder="请输入服务类型编号" />
+      <el-form-item label="订单类型" prop="orderType">
+        <el-select v-model="formData.orderType" placeholder="请选择订单类型">
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_ORDER_TYPE)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="店员等级" prop="staffLevel">
+        <el-select v-model="formData.staffLevel" placeholder="请选择店员等级">
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_STAFF_LEVEL)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="购买数量" prop="purchaseQuantity">
         <el-input v-model="formData.purchaseQuantity" placeholder="请输入购买数量" />
@@ -34,7 +56,14 @@
         <el-input v-model="formData.otherRequirements" placeholder="请输入其他要求" />
       </el-form-item>
       <el-form-item label="排除下单店员" prop="excludeStaff">
-        <el-input v-model="formData.excludeStaff" placeholder="请输入排除下单店员" />
+        <el-select v-model="formData.excludeStaff" placeholder="请选择排除下单店员">
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_IS_NOT)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="优惠券编号" prop="coupon">
         <el-input v-model="formData.coupon" placeholder="请输入优惠券编号" />
@@ -43,6 +72,19 @@
         <el-select v-model="formData.paymentType" placeholder="请选择支付类型">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_PAYMENT_TYPE)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="总金额" prop="totalAmount">
+        <el-input v-model="formData.totalAmount" placeholder="请输入总金额" />
+      </el-form-item>
+      <el-form-item label="订单状态" prop="orderState">
+        <el-select v-model="formData.orderState" placeholder="请选择订单状态">
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_ORDER_STATE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -58,10 +100,10 @@
 </template>
 <script setup lang="ts">
 import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
-import { RandomOrderApi, RandomOrderVO } from '@/api/play/randomorder'
+import { ServiceOrderApi, ServiceOrderVO } from '@/api/play/serviceorder'
 
-/** 陪玩随机下单 表单 */
-defineOptions({ name: 'RandomOrderForm' })
+/** 陪玩订单 表单 */
+defineOptions({ name: 'ServiceOrderForm' })
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -73,14 +115,19 @@ const formType = ref('') // 表单的类型：create - 新增；update - 修改
 const formData = ref({
   id: undefined,
   userId: undefined,
+  staffId: undefined,
+  giftId: undefined,
   staffSex: undefined,
-  serviceTypeId: undefined,
+  orderType: undefined,
+  staffLevel: undefined,
   purchaseQuantity: undefined,
   wechat: undefined,
   otherRequirements: undefined,
   excludeStaff: undefined,
   coupon: undefined,
-  paymentType: undefined
+  paymentType: undefined,
+  totalAmount: undefined,
+  orderState: undefined
 })
 const formRules = reactive({
 })
@@ -96,7 +143,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await RandomOrderApi.getRandomOrder(id)
+      formData.value = await ServiceOrderApi.getServiceOrder(id)
     } finally {
       formLoading.value = false
     }
@@ -112,12 +159,12 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as unknown as RandomOrderVO
+    const data = formData.value as unknown as ServiceOrderVO
     if (formType.value === 'create') {
-      await RandomOrderApi.createRandomOrder(data)
+      await ServiceOrderApi.createServiceOrder(data)
       message.success(t('common.createSuccess'))
     } else {
-      await RandomOrderApi.updateRandomOrder(data)
+      await ServiceOrderApi.updateServiceOrder(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
@@ -133,14 +180,19 @@ const resetForm = () => {
   formData.value = {
     id: undefined,
     userId: undefined,
+    staffId: undefined,
+    giftId: undefined,
     staffSex: undefined,
-    serviceTypeId: undefined,
+    orderType: undefined,
+    staffLevel: undefined,
     purchaseQuantity: undefined,
     wechat: undefined,
     otherRequirements: undefined,
     excludeStaff: undefined,
     coupon: undefined,
-    paymentType: undefined
+    paymentType: undefined,
+    totalAmount: undefined,
+    orderState: undefined
   }
   formRef.value?.resetFields()
 }

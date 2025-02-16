@@ -69,6 +69,10 @@
       <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="名字" align="center" prop="name" />
       <el-table-column label="父级编号" align="center" prop="parentId" />
+      <el-table-column label="普通等级价格" align="center" prop="ordinaryLevelPrice" />
+      <el-table-column label="金牌等级价格" align="center" prop="goldmedalLevelPrice" />
+      <el-table-column label="镇店等级价格" align="center" prop="zhendianLevelPrice" />
+      <el-table-column label="首席等级价格" align="center" prop="chiefLevelPrice" />
       <el-table-column
         label="创建时间"
         align="center"

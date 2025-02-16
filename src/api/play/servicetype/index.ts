@@ -5,6 +5,10 @@ export interface ServiceTypeVO {
   id: number // 编号
   name: string // 名字
   parentId: number // 父级编号
+  ordinaryLevelPrice: number // 普通等级价格
+  goldmedalLevelPrice: number // 金牌等级价格
+  zhendianLevelPrice: number // 镇店等级价格
+  chiefLevelPrice: number // 首席等级价格
 }
 
 // 陪玩服务类型 API

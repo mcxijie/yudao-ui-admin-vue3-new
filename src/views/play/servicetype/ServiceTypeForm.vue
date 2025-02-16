@@ -20,6 +20,18 @@
           placeholder="请选择父级编号"
         />
       </el-form-item>
+      <el-form-item label="普通等级价格" prop="ordinaryLevelPrice">
+        <el-input v-model="formData.ordinaryLevelPrice" placeholder="请输入普通等级价格" />
+      </el-form-item>
+      <el-form-item label="金牌等级价格" prop="goldmedalLevelPrice">
+        <el-input v-model="formData.goldmedalLevelPrice" placeholder="请输入金牌等级价格" />
+      </el-form-item>
+      <el-form-item label="镇店等级价格" prop="zhendianLevelPrice">
+        <el-input v-model="formData.zhendianLevelPrice" placeholder="请输入镇店等级价格" />
+      </el-form-item>
+      <el-form-item label="首席等级价格" prop="chiefLevelPrice">
+        <el-input v-model="formData.chiefLevelPrice" placeholder="请输入首席等级价格" />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
@@ -44,7 +56,11 @@ const formType = ref('') // 表单的类型：create - 新增；update - 修改
 const formData = ref({
   id: undefined,
   name: undefined,
-  parentId: undefined
+  parentId: undefined,
+  ordinaryLevelPrice: undefined,
+  goldmedalLevelPrice: undefined,
+  zhendianLevelPrice: undefined,
+  chiefLevelPrice: undefined
 })
 const formRules = reactive({
   name: [{ required: true, message: '名字不能为空', trigger: 'blur' }],
@@ -101,7 +117,11 @@ const resetForm = () => {
   formData.value = {
     id: undefined,
     name: undefined,
-    parentId: undefined
+    parentId: undefined,
+    ordinaryLevelPrice: undefined,
+    goldmedalLevelPrice: undefined,
+    zhendianLevelPrice: undefined,
+    chiefLevelPrice: undefined
   }
   formRef.value?.resetFields()
 }
