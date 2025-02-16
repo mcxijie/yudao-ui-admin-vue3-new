@@ -17,6 +17,10 @@ export interface ServiceOrderVO {
   paymentType: number // 支付类型
   totalAmount: number // 总金额
   orderState: number // 订单状态
+  isEvaluate: number // 是否评价
+  placeOrderTime: Date // 下单时间
+  receivingOrderTime: Date // 接单时间
+  completionOrderTime: Date // 订单完成时间
 }
 
 // 陪玩订单 API

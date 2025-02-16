@@ -107,9 +107,46 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
+      <el-form-item label="是否评价" prop="isEvaluate">
+        <el-select
+          v-model="queryParams.isEvaluate"
+          placeholder="请选择是否评价"
+          clearable
+          class="!w-240px"
+        >
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_IS_NOT)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="下单时间" prop="placeOrderTime">
         <el-date-picker
-          v-model="queryParams.createTime"
+          v-model="queryParams.placeOrderTime"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-220px"
+        />
+      </el-form-item>
+      <el-form-item label="接单时间" prop="receivingOrderTime">
+        <el-date-picker
+          v-model="queryParams.receivingOrderTime"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
+          class="!w-220px"
+        />
+      </el-form-item>
+      <el-form-item label="订单完成时间" prop="completionOrderTime">
+        <el-date-picker
+          v-model="queryParams.completionOrderTime"
           value-format="YYYY-MM-DD HH:mm:ss"
           type="daterange"
           start-placeholder="开始日期"
@@ -156,7 +193,7 @@
       </el-table-column>
       <el-table-column label="订单类型" align="center" prop="orderType">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.PLAY_ORDER_TYPE" :value="scope.row.orderType" />
+          <dict-tag :type="DICT_TYPE.PLAY_PAYMENT_TYPE" :value="scope.row.orderType" />
         </template>
       </el-table-column>
       <el-table-column label="店员等级" align="center" prop="staffLevel">
@@ -184,10 +221,29 @@
           <dict-tag :type="DICT_TYPE.PLAY_ORDER_STATE" :value="scope.row.orderState" />
         </template>
       </el-table-column>
+      <el-table-column label="是否评价" align="center" prop="isEvaluate">
+        <template #default="scope">
+          <dict-tag :type="DICT_TYPE.PLAY_IS_NOT" :value="scope.row.isEvaluate" />
+        </template>
+      </el-table-column>
       <el-table-column
-        label="创建时间"
+        label="下单时间"
         align="center"
-        prop="createTime"
+        prop="placeOrderTime"
+        :formatter="dateFormatter"
+        width="180px"
+      />
+      <el-table-column
+        label="接单时间"
+        align="center"
+        prop="receivingOrderTime"
+        :formatter="dateFormatter"
+        width="180px"
+      />
+      <el-table-column
+        label="订单完成时间"
+        align="center"
+        prop="completionOrderTime"
         :formatter="dateFormatter"
         width="180px"
       />
@@ -251,7 +307,10 @@ const queryParams = reactive({
   excludeStaff: undefined,
   paymentType: undefined,
   orderState: undefined,
-  createTime: []
+  isEvaluate: undefined,
+  placeOrderTime: [],
+  receivingOrderTime: [],
+  completionOrderTime: []
 })
 const queryFormRef = ref() // 搜索的表单
 const exportLoading = ref(false) // 导出的加载中

@@ -91,6 +91,40 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="是否评价" prop="isEvaluate">
+        <el-select v-model="formData.isEvaluate" placeholder="请选择是否评价">
+          <el-option
+            v-for="dict in getIntDictOptions(DICT_TYPE.PLAY_IS_NOT)"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="下单时间" prop="placeOrderTime">
+        <el-date-picker
+          v-model="formData.placeOrderTime"
+          type="date"
+          value-format="x"
+          placeholder="选择下单时间"
+        />
+      </el-form-item>
+      <el-form-item label="接单时间" prop="receivingOrderTime">
+        <el-date-picker
+          v-model="formData.receivingOrderTime"
+          type="date"
+          value-format="x"
+          placeholder="选择接单时间"
+        />
+      </el-form-item>
+      <el-form-item label="订单完成时间" prop="completionOrderTime">
+        <el-date-picker
+          v-model="formData.completionOrderTime"
+          type="date"
+          value-format="x"
+          placeholder="选择订单完成时间"
+        />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="submitForm" type="primary" :disabled="formLoading">确 定</el-button>
@@ -127,7 +161,11 @@ const formData = ref({
   coupon: undefined,
   paymentType: undefined,
   totalAmount: undefined,
-  orderState: undefined
+  orderState: undefined,
+  isEvaluate: undefined,
+  placeOrderTime: undefined,
+  receivingOrderTime: undefined,
+  completionOrderTime: undefined
 })
 const formRules = reactive({
 })
@@ -192,7 +230,11 @@ const resetForm = () => {
     coupon: undefined,
     paymentType: undefined,
     totalAmount: undefined,
-    orderState: undefined
+    orderState: undefined,
+    isEvaluate: undefined,
+    placeOrderTime: undefined,
+    receivingOrderTime: undefined,
+    completionOrderTime: undefined
   }
   formRef.value?.resetFields()
 }
