@@ -8,7 +8,7 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="礼物名称" prop="name">
+      <el-form-item label="礼物名称1" prop="name">
         <el-input
           v-model="queryParams.name"
           placeholder="请输入礼物名称"
