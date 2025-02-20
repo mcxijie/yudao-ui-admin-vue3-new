@@ -246,5 +246,6 @@ export enum DICT_TYPE {
   PLAY_STAFF_LEVEL = 'play_staff_level',
   PLAY_PAYMENT_TYPE = 'play_payment_type',
   PLAY_ORDER_TYPE = "play_order_type",
-  PLAY_ORDER_STATE = "play_order_state"
+  PLAY_ORDER_STATE = "play_order_state",
+  PLAY_ORDER_SCORE = "play_order_score"
 }
