@@ -31,15 +31,15 @@ jobs:
       
 
       # 4️⃣ 上传 dist.zip 到服务器的 temp/ 目录
-      - name: Upload dist.zip to server
+      - name: Upload to Server
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_IP }}
+          port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "dist.zip"
+          source: "dist-prod/dist.zip"  # 这里改成 dist-prod
           target: "/work/projects/yudao-ui-admin/temp/"
-
 
       # 5️⃣ 远程执行部署脚本
       - name: Execute deployment script on server
