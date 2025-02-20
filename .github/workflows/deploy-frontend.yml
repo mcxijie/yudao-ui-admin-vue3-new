@@ -50,5 +50,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            chmod +x /work/projects/yudao-ui-admin/deploy-frontend.sh
             cd /work/projects/yudao-ui-admin
             ./deploy-frontend.sh
