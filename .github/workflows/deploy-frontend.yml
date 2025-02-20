@@ -3,7 +3,7 @@ name: Deploy Frontend
 on:
   push:
     branches:
-      - main  # 监听 main 分支
+      - master  # 监听 main 分支
   workflow_dispatch:  # 允许手动触发
 
 jobs:
